@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: falcon-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: falcon
+  template:
+    metadata:
+      labels:
+        app: falcon
+    spec:
+      containers:
+        - name: falcon
+          image: khaboss/falcon
+          imagePullPolicy: "Never"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "200Mi"
+            limits:
+              cpu: "700m"
+              memory: "300Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: falcon-clusterip-srv
+spec:
+  selector:
+    app: falcon
+  ports:
+    - name: falcon
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

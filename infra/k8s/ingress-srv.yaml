@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/limit-rps: '2'
+    nginx.ingress.kubernetes.io/limit-rpm: '30'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    - host: posts.com
+      http:
+        paths:
+          # - pathType: Prefix
+          #   path: /posts/?(.*)
+          #   backend:
+          #     service:
+          #       name: expressjs-clusterip-srv
+          #       port:
+          #         number: 4000
+
+          - pathType: Prefix
+            path: /?(.*)
+            backend:
+              service:
+                name: expressjs-clusterip-srv
+                port:
+                  number: 4000

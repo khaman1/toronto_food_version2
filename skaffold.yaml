@@ -1,0 +1,63 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - infra/k8s/ingress-srv.yaml
+      - infra/k8s/main-srv.yaml
+      # - infra/k8s/backend/quart-depl.yaml
+      # - infra/k8s/worker/time-depl.yaml
+      - infra/k8s/cache/redis-depl.yaml
+      # - infra/k8s/db_storage/mongo-depl.yaml
+
+      # - infra/k8s/db_storage/meilisearch-depl.yaml
+      # - infra/k8s/external-loadbalancer.yaml
+      # - infra/k8s/kafka/*.yaml
+build:
+  local:
+    push: false
+  artifacts:
+    # - image: khaclub/quart
+    #   context: services/backend/quart
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: '*.py'
+    #         dest: .
+    # - image: khaclub/nestjs
+    #   context: services/backend/nestjs
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: '*.js'
+    #         dest: .
+    # - image: khaclub/quart
+    #   context: services/backend/quart
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: '*.js'
+    #         dest: .
+
+
+    # - image: khaclub/time
+    #   context: services/worker/time
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: '*.py'
+    #         dest: .
+
+
+    - image: khaboss/redis
+      context: services/cache/redis
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.conf'
+            dest: .
